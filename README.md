@@ -19,7 +19,11 @@ also clear your browser cache manually (and flush the OS resolver cache).
 ### Tasks
 
 1. **Set up and capture (cold cache).**
-Pick a popular site you haven't visited recently. Clear your browser cache (and flush
+Pick a popular site you haven't visited recently. **First make sure secure DNS is OFF**
+for this run: Firefox in the US and some Chrome setups turn DNS-over-HTTPS on by
+default (Firefox: Settings → Privacy & Security → DNS over HTTPS → Off; Chrome: Settings
+→ Privacy and security → Security → "Use secure DNS" off). If it is on, the `dns`
+filter shows few or none of the page's lookups. Clear your browser cache (and flush
 the OS DNS cache if you can). Start Wireshark capturing **before** you load the page,
 load the site once, then stop. Apply the `dns` display filter and **export only the DNS
 packets** (File → Export Specified Packets → "Displayed") to `dns.pcap`. See
@@ -66,6 +70,12 @@ clear caches again, and recapture the same site. Show your **evidence**: with Do
 plain `dns` filter should show **nothing** for the page load, while traffic to the
 resolver on port `443` (DoH) or `853` (DoT) appears instead. Paste a short note of
 what you observed. Then state **who can see your activity now**.
+   - **Pick Cloudflare explicitly.** In Chrome, choose "Use secure DNS" → **Cloudflare
+     (1.1.1.1)**; in Firefox, choose Max Protection with Cloudflare. Do not leave it on
+     "OS default" or automatic: on many home networks that quietly upgrades to your ISP's
+     own DoH resolver (e.g. Comcast's `doh.xfinity.com`), so the ISP still sees every
+     lookup, as the resolver operator. If that happened in your run, say so: it is a
+     good observation for Task 6.
    - **Where to look.** Browsers usually send DoH to a resolver *hostname*, not to
      `1.1.1.1`: Chrome and Brave use `chrome.cloudflare-dns.com` and Firefox uses
      `mozilla.cloudflare-dns.com` (addresses like `162.159.61.x` or `172.64.41.x`), and
